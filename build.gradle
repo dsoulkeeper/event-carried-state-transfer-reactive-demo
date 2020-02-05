@@ -1,0 +1,54 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.4.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+}
+
+allprojects {
+    group = 'com.event.practice'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = '1.8'
+    repositories {
+        mavenCentral()
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    dependencies {
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+
+        testCompileOnly 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
+        testImplementation 'org.testcontainers:junit-jupiter:1.12.5'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    // This is required so that IDE can resolve common module classes in other microservices
+    if (System.getProperty("cmd") != null) {
+        sourceSets {
+            main {
+                java {
+                    srcDir 'src/main/java'
+                    srcDir '../common/src/main/java'
+                }
+            }
+        }
+    }
+}

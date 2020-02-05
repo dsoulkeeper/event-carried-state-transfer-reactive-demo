@@ -1,0 +1,4 @@
+rootProject.name = 'event-carried-state-transfer-demo-reactive'
+include ':publisher'
+include ':subscriber'
+include ':common'
